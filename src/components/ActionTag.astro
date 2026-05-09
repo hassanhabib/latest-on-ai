@@ -1,5 +1,5 @@
 ---
-type Action = 'adopt' | 'experiment' | 'watch' | 'ignore';
+type Action = 'learn' | 'take' | 'leave';
 
 interface Props {
   action: Action;
@@ -9,21 +9,18 @@ interface Props {
 const { action, size = 'sm' } = Astro.props;
 
 const labels: Record<Action, string> = {
-  adopt: 'Adopt',
-  experiment: 'Experiment',
-  watch: 'Watch',
-  ignore: 'Ignore',
+  learn: 'Learn',
+  take: 'Take',
+  leave: 'Leave',
 };
 
 const colorClass: Record<Action, string> = {
-  adopt:
-    'border-action-adopt-light text-action-adopt-light dark:border-action-adopt-dark dark:text-action-adopt-dark',
-  experiment:
-    'border-action-experiment-light text-action-experiment-light dark:border-action-experiment-dark dark:text-action-experiment-dark',
-  watch:
-    'border-action-watch-light text-action-watch-light dark:border-action-watch-dark dark:text-action-watch-dark',
-  ignore:
-    'border-action-ignore-light text-action-ignore-light dark:border-action-ignore-dark dark:text-action-ignore-dark',
+  learn:
+    'border-action-learn-light text-action-learn-light dark:border-action-learn-dark dark:text-action-learn-dark',
+  take:
+    'border-action-take-light text-action-take-light dark:border-action-take-dark dark:text-action-take-dark',
+  leave:
+    'border-action-leave-light text-action-leave-light dark:border-action-leave-dark dark:text-action-leave-dark',
 };
 
 const sizeClass = size === 'md' ? 'px-2.5 py-0.5 text-sm' : 'px-2 py-0.5 text-xs';

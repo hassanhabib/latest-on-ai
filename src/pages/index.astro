@@ -11,12 +11,12 @@ const reviews = (await getCollection('reviews', ({ data }) => !isProd || !data.d
 ---
 
 <BaseLayout
-  title="lateston.ai"
+  title="latest on.ai"
   description="Engineering reviews of the latest in AI, through The Standard."
 >
   <section class="mb-10">
     <h1 class="font-serif text-4xl font-semibold tracking-tight md:text-5xl">
-      lateston on <span class="text-accent-light dark:text-accent-dark">.ai</span>
+      latest on <span class="text-accent-light dark:text-accent-dark">.ai</span>
     </h1>
     <p class="mt-4 max-w-prose font-serif text-lg text-ink-light/85 dark:text-ink-dark/85">
       Engineering reviews of the latest in AI, through The Standard.
@@ -39,35 +39,27 @@ const reviews = (await getCollection('reviews', ({ data }) => !isProd || !data.d
     </button>
     <button
       type="button"
-      data-filter="adopt"
+      data-filter="learn"
       aria-pressed="false"
       class="filter-btn rounded-full border px-3 py-1"
     >
-      Adopt
+      Learn
     </button>
     <button
       type="button"
-      data-filter="experiment"
+      data-filter="take"
       aria-pressed="false"
       class="filter-btn rounded-full border px-3 py-1"
     >
-      Experiment
+      Take
     </button>
     <button
       type="button"
-      data-filter="watch"
+      data-filter="leave"
       aria-pressed="false"
       class="filter-btn rounded-full border px-3 py-1"
     >
-      Watch
-    </button>
-    <button
-      type="button"
-      data-filter="ignore"
-      aria-pressed="false"
-      class="filter-btn rounded-full border px-3 py-1"
-    >
-      Ignore
+      Leave
     </button>
   </div>
 

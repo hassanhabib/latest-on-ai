@@ -5,7 +5,7 @@ const reviews = defineCollection({
   schema: z.object({
     title: z.string(),
     verdict: z.string().max(160),
-    action: z.enum(['adopt', 'experiment', 'watch', 'ignore']),
+    action: z.enum(['learn', 'take', 'leave']),
     depth: z.enum(['quick', 'deep']),
     publishedAt: z.coerce.date(),
     updatedAt: z.coerce.date().optional(),

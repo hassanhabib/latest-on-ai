@@ -18,10 +18,9 @@ export default {
           dark: '#5B82E8',
         },
         action: {
-          adopt: { light: '#059669', dark: '#34D399' },
-          experiment: { light: '#2563EB', dark: '#60A5FA' },
-          watch: { light: '#D97706', dark: '#FBBF24' },
-          ignore: { light: '#737373', dark: '#A3A3A3' },
+          learn: { light: '#2563EB', dark: '#60A5FA' },
+          take: { light: '#059669', dark: '#34D399' },
+          leave: { light: '#737373', dark: '#A3A3A3' },
         },
       },
       fontFamily: {
