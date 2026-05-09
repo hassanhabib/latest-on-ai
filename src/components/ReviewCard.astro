@@ -1,0 +1,64 @@
+---
+import ActionTag from './ActionTag.astro';
+import StackTag from './StackTag.astro';
+import ReadingTime from './ReadingTime.astro';
+
+type Action = 'adopt' | 'experiment' | 'watch' | 'ignore';
+type Depth = 'quick' | 'deep';
+
+interface Props {
+  href: string;
+  title: string;
+  verdict: string;
+  action: Action;
+  depth: Depth;
+  stack: string[];
+  publishedAt: Date;
+  body: string;
+}
+
+const { href, title, verdict, action, depth, stack, publishedAt, body } = Astro.props;
+
+const depthLabel = depth === 'quick' ? 'Quick' : 'Deep';
+
+const formattedDate = publishedAt.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<article
+  data-action={action}
+  data-depth={depth}
+  class="group relative border-b border-ink-light/10 py-8 dark:border-ink-dark/10"
+>
+  <a
+    href={href}
+    class="block no-underline transition-colors duration-150 hover:text-accent-light dark:hover:text-accent-dark"
+  >
+    <h2 class="font-serif text-2xl font-semibold tracking-tight md:text-3xl">{title}</h2>
+    <p
+      class="mt-3 border-l-2 border-accent-light pl-3 font-serif text-lg leading-snug text-ink-light/90 dark:border-accent-dark dark:text-ink-dark/90"
+    >
+      {verdict}
+    </p>
+  </a>
+
+  <div class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-sm">
+    <ActionTag action={action} />
+    <span
+      class="inline-flex items-center rounded-full border border-ink-light/20 px-2 py-0.5 text-xs uppercase tracking-wide text-ink-light/70 dark:border-ink-dark/20 dark:text-ink-dark/70"
+    >
+      {depthLabel}
+    </span>
+    {stack.map((label) => <StackTag label={label} />)}
+    <ReadingTime text={body} />
+    <time
+      datetime={publishedAt.toISOString()}
+      class="text-sm text-ink-light/60 dark:text-ink-dark/60"
+    >
+      {formattedDate}
+    </time>
+  </div>
+</article>

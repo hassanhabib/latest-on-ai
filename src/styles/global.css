@@ -1,0 +1,149 @@
+@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html {
+    @apply bg-bg-light text-ink-light;
+  }
+
+  html.dark {
+    @apply bg-bg-dark text-ink-dark;
+  }
+
+  body {
+    font-family: theme('fontFamily.serif');
+    font-size: 19px;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  nav,
+  header,
+  footer,
+  button,
+  .ui-font {
+    font-family: theme('fontFamily.sans');
+  }
+
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: theme('fontFamily.mono');
+    font-size: 0.92em;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 150ms ease;
+  }
+
+  a:hover {
+    @apply text-accent-light dark:text-accent-dark;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: theme('fontFamily.serif');
+    line-height: 1.25;
+  }
+
+  hr {
+    @apply border-ink-light/15 dark:border-ink-dark/15;
+  }
+}
+
+@layer components {
+  .prose-body {
+    max-width: theme('maxWidth.prose');
+  }
+
+  .prose-body p {
+    margin-block: 1.1em;
+  }
+
+  .prose-body p + p {
+    margin-block-start: 1.1em;
+  }
+
+  .prose-body ul,
+  .prose-body ol {
+    margin-block: 1em;
+    padding-inline-start: 1.4em;
+  }
+
+  .prose-body ul {
+    list-style: disc;
+  }
+
+  .prose-body ol {
+    list-style: decimal;
+  }
+
+  .prose-body li {
+    margin-block: 0.3em;
+  }
+
+  .prose-body :not(pre) > code {
+    @apply rounded px-1 py-0.5;
+    background-color: rgb(23 23 23 / 0.06);
+  }
+
+  html.dark .prose-body :not(pre) > code {
+    background-color: rgb(236 236 234 / 0.08);
+  }
+
+  .prose-body pre {
+    @apply my-6 overflow-x-auto rounded-lg border border-ink-light/10 p-4 dark:border-ink-dark/15;
+    line-height: 1.55;
+  }
+
+  .prose-body blockquote {
+    @apply my-6 border-l-2 border-accent-light pl-4 italic text-ink-light/85 dark:border-accent-dark dark:text-ink-dark/85;
+  }
+
+  .prose-body a {
+    @apply text-accent-light dark:text-accent-dark;
+  }
+}
+
+/* Shiki dual-theme: swap to dark theme tokens when html.dark */
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+.code-block {
+  position: relative;
+}
+
+.code-block .code-lang {
+  @apply absolute right-2 top-2 select-none rounded bg-ink-light/10 px-1.5 py-0.5 font-sans text-[10px] uppercase tracking-wide text-ink-light/60 dark:bg-ink-dark/10 dark:text-ink-dark/60;
+}
+
+.code-block .copy-btn {
+  @apply absolute right-2 bottom-2 inline-flex items-center gap-1 rounded border border-ink-light/15 bg-bg-light/80 px-1.5 py-0.5 font-sans text-[11px] text-ink-light/70 backdrop-blur transition-colors duration-150 hover:border-ink-light/40 hover:text-ink-light dark:border-ink-dark/20 dark:bg-bg-dark/70 dark:text-ink-dark/70 dark:hover:border-ink-dark/40 dark:hover:text-ink-dark;
+}

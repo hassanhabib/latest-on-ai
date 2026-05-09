@@ -1,0 +1,24 @@
+---
+interface Props {
+  number: number;
+  title: string;
+  id?: string;
+}
+
+const { number, title, id } = Astro.props;
+
+const slug =
+  id ??
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+---
+
+<h2 id={slug} class="mt-12 scroll-mt-24 font-sans text-2xl font-semibold tracking-tight">
+  <span
+    class="mr-3 font-mono text-base font-normal text-ink-light/50 dark:text-ink-dark/50"
+    aria-hidden="true">{number}.</span
+  >
+  <span>{title}</span>
+</h2>

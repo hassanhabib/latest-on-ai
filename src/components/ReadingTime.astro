@@ -1,0 +1,19 @@
+---
+interface Props {
+  text: string;
+  runMinutes?: number;
+}
+
+const { text, runMinutes } = Astro.props;
+
+const wordsPerMinute = 200;
+const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+
+const label =
+  runMinutes !== undefined
+    ? `${minutes} min read · ${runMinutes} min if you run the code`
+    : `${minutes} min read`;
+---
+
+<span class="font-sans text-sm text-ink-light/70 dark:text-ink-dark/70">{label}</span>

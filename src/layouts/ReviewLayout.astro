@@ -1,0 +1,116 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import VerdictBanner from '../components/VerdictBanner.astro';
+import ActionTag from '../components/ActionTag.astro';
+import StackTag from '../components/StackTag.astro';
+import ReadingTime from '../components/ReadingTime.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'reviews'>;
+  prev?: { slug: string; title: string };
+  next?: { slug: string; title: string };
+}
+
+const { entry, prev, next } = Astro.props;
+const { data, body } = entry;
+
+const depthLabel = data.depth === 'quick' ? 'Quick' : 'Deep';
+
+const fmt = (date: Date): string =>
+  date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <article>
+    <header class="mb-8">
+      <h1 class="font-serif text-4xl font-semibold tracking-tight md:text-5xl">{data.title}</h1>
+      <VerdictBanner verdict={data.verdict} />
+
+      <div
+        class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-sm text-ink-light/70 dark:text-ink-dark/70"
+      >
+        <ActionTag action={data.action} size="md" />
+        <span
+          class="inline-flex items-center rounded-full border border-ink-light/20 px-2 py-0.5 text-xs uppercase tracking-wide dark:border-ink-dark/20"
+        >
+          {depthLabel}
+        </span>
+        {data.stack.map((label) => <StackTag label={label} />)}
+        <ReadingTime text={body} />
+        <time datetime={data.publishedAt.toISOString()}>{fmt(data.publishedAt)}</time>
+        {
+          data.updatedAt && (
+            <span>
+              · updated <time datetime={data.updatedAt.toISOString()}>{fmt(data.updatedAt)}</time>
+            </span>
+          )
+        }
+      </div>
+
+      {
+        data.sources.length > 0 && (
+          <details
+            open
+            class="mt-6 rounded border border-ink-light/15 bg-ink-light/5 p-4 font-sans text-sm dark:border-ink-dark/15 dark:bg-ink-dark/5"
+          >
+            <summary class="cursor-pointer font-medium">Primary sources</summary>
+            <ul class="mt-2 space-y-1">
+              {data.sources.map((s) => (
+                <li>
+                  <a href={s.url} rel="noopener noreferrer" target="_blank">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+    </header>
+
+    <div class="prose-body mx-auto">
+      <slot />
+    </div>
+
+    {
+      (prev || next) && (
+        <nav
+          class="mt-16 grid gap-4 border-t border-ink-light/10 pt-8 font-sans text-sm sm:grid-cols-2 dark:border-ink-dark/10"
+          aria-label="Review navigation"
+        >
+          {prev ? (
+            <a
+              href={`/reviews/${prev.slug}`}
+              class="group block rounded border border-ink-light/10 p-4 no-underline transition-colors duration-150 hover:border-ink-light/40 dark:border-ink-dark/10 dark:hover:border-ink-dark/40"
+            >
+              <span class="block text-xs uppercase tracking-wide text-ink-light/60 dark:text-ink-dark/60">
+                Previous
+              </span>
+              <span class="mt-1 block font-serif text-base">{prev.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a
+              href={`/reviews/${next.slug}`}
+              class="group block rounded border border-ink-light/10 p-4 text-right no-underline transition-colors duration-150 hover:border-ink-light/40 sm:text-right dark:border-ink-dark/10 dark:hover:border-ink-dark/40"
+            >
+              <span class="block text-xs uppercase tracking-wide text-ink-light/60 dark:text-ink-dark/60">
+                Next
+              </span>
+              <span class="mt-1 block font-serif text-base">{next.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )
+    }
+  </article>
+</BaseLayout>

@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReviewCard from '../../components/ReviewCard.astro';
+import { getCollection } from 'astro:content';
+
+const isProd = import.meta.env.PROD;
+
+const reviews = (await getCollection('reviews', ({ data }) => !isProd || !data.draft)).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+---
+
+<BaseLayout
+  title="Reviews"
+  description="The full archive of lateston.ai reviews, newest first."
+>
+  <h1 class="mb-8 font-serif text-3xl font-semibold tracking-tight">Reviews</h1>
+
+  <div
+    id="filter-bar"
+    role="group"
+    aria-label="Filter by action"
+    class="mb-8 flex flex-wrap gap-2 font-sans text-sm"
+  >
+    <button
+      type="button"
+      data-filter="all"
+      aria-pressed="true"
+      class="filter-btn rounded-full border px-3 py-1"
+    >
+      All
+    </button>
+    <button
+      type="button"
+      data-filter="adopt"
+      aria-pressed="false"
+      class="filter-btn rounded-full border px-3 py-1"
+    >
+      Adopt
+    </button>
+    <button
+      type="button"
+      data-filter="experiment"
+      aria-pressed="false"
+      class="filter-btn rounded-full border px-3 py-1"
+    >
+      Experiment
+    </button>
+    <button
+      type="button"
+      data-filter="watch"
+      aria-pressed="false"
+      class="filter-btn rounded-full border px-3 py-1"
+    >
+      Watch
+    </button>
+    <button
+      type="button"
+      data-filter="ignore"
+      aria-pressed="false"
+      class="filter-btn rounded-full border px-3 py-1"
+    >
+      Ignore
+    </button>
+  </div>
+
+  <ol id="review-list" class="list-none">
+    {
+      reviews.map((review) => (
+        <li>
+          <ReviewCard
+            href={`/reviews/${review.slug}`}
+            title={review.data.title}
+            verdict={review.data.verdict}
+            action={review.data.action}
+            depth={review.data.depth}
+            stack={review.data.stack}
+            publishedAt={review.data.publishedAt}
+            body={review.body}
+          />
+        </li>
+      ))
+    }
+    {
+      reviews.length === 0 && (
+        <li class="py-12 text-center font-sans text-sm text-ink-light/60 dark:text-ink-dark/60">
+          No reviews yet.
+        </li>
+      )
+    }
+  </ol>
+
+  <style>
+    .filter-btn {
+      border-color: rgb(23 23 23 / 0.2);
+      transition: all 150ms ease;
+    }
+    :global(html.dark) .filter-btn {
+      border-color: rgb(236 236 234 / 0.2);
+    }
+    .filter-btn[aria-pressed='true'] {
+      background-color: #1b4fce;
+      color: #fafaf7;
+      border-color: #1b4fce;
+    }
+    :global(html.dark) .filter-btn[aria-pressed='true'] {
+      background-color: #5b82e8;
+      color: #0e0e10;
+      border-color: #5b82e8;
+    }
+    .filter-btn:hover:not([aria-pressed='true']) {
+      border-color: rgb(23 23 23 / 0.5);
+    }
+    :global(html.dark) .filter-btn:hover:not([aria-pressed='true']) {
+      border-color: rgb(236 236 234 / 0.5);
+    }
+  </style>
+
+  <script is:inline>
+    (() => {
+      const bar = document.getElementById('filter-bar');
+      const list = document.getElementById('review-list');
+      if (!bar || !list) return;
+      const buttons = bar.querySelectorAll('.filter-btn');
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-filter');
+          buttons.forEach((b) =>
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'),
+          );
+          list.querySelectorAll('article[data-action]').forEach((el) => {
+            const action = el.getAttribute('data-action');
+            const show = target === 'all' || action === target;
+            el.parentElement.style.display = show ? '' : 'none';
+          });
+        });
+      });
+    })();
+  </script>
+</BaseLayout>

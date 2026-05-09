@@ -1,0 +1,41 @@
+---
+title: "Replace with the post title"
+verdict: "Replace with a single bold one-line verdict, max ~140 chars."
+action: experiment
+depth: quick
+publishedAt: 2026-01-01
+stack:
+  - Python
+sources:
+  - label: "Primary source"
+    url: "https://example.com"
+description: "One or two SEO-friendly sentences summarising the review."
+draft: true
+tags: []
+---
+
+import SectionHeading from '../../components/SectionHeading.astro';
+
+<SectionHeading number={0} title="The Signal" />
+
+What happened. Plain English. Link only to primary sources, not to coverage of coverage.
+
+<SectionHeading number={1} title="The Analysis" />
+
+What the thing actually is once you strip the marketing language. Be precise about what is new versus what is repackaged.
+
+<SectionHeading number={2} title="The Test" />
+
+How to verify the claim yourself. A runnable snippet, a command, or a check. If it is not testable today, write "What you would need to verify it" and list the specific signals.
+
+```bash
+echo "replace with a real, runnable check"
+```
+
+<SectionHeading number={3} title="The Standard Take" />
+
+The framework view. How does this fit, or fail to fit, The Standard and the Tri-Nature AI Agent Framework. Practical, not theoretical.
+
+<SectionHeading number={4} title="What to do with this" />
+
+Concrete guidance tied to the action tag in frontmatter. Tell the reader what to do this week, this month, or never.

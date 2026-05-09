@@ -1,0 +1,13 @@
+---
+interface Props {
+  verdict: string;
+}
+
+const { verdict } = Astro.props;
+---
+
+<blockquote
+  class="my-8 border-l-4 border-accent-light pl-5 font-serif text-2xl leading-snug text-ink-light dark:border-accent-dark dark:text-ink-dark"
+>
+  {verdict}
+</blockquote>

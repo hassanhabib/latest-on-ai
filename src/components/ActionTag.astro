@@ -1,0 +1,40 @@
+---
+type Action = 'adopt' | 'experiment' | 'watch' | 'ignore';
+
+interface Props {
+  action: Action;
+  size?: 'sm' | 'md';
+}
+
+const { action, size = 'sm' } = Astro.props;
+
+const labels: Record<Action, string> = {
+  adopt: 'Adopt',
+  experiment: 'Experiment',
+  watch: 'Watch',
+  ignore: 'Ignore',
+};
+
+const colorClass: Record<Action, string> = {
+  adopt:
+    'border-action-adopt-light text-action-adopt-light dark:border-action-adopt-dark dark:text-action-adopt-dark',
+  experiment:
+    'border-action-experiment-light text-action-experiment-light dark:border-action-experiment-dark dark:text-action-experiment-dark',
+  watch:
+    'border-action-watch-light text-action-watch-light dark:border-action-watch-dark dark:text-action-watch-dark',
+  ignore:
+    'border-action-ignore-light text-action-ignore-light dark:border-action-ignore-dark dark:text-action-ignore-dark',
+};
+
+const sizeClass = size === 'md' ? 'px-2.5 py-0.5 text-sm' : 'px-2 py-0.5 text-xs';
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded-full border font-sans font-medium uppercase tracking-wide',
+    sizeClass,
+    colorClass[action],
+  ]}
+>
+  {labels[action]}
+</span>

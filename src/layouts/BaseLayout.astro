@@ -1,0 +1,113 @@
+---
+import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+}
+
+const { title, description, canonical } = Astro.props;
+
+const siteName = 'lateston.ai';
+const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
+const metaDescription =
+  description ?? 'Engineering reviews of the latest in AI, through The Standard.';
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="lateston.ai"
+      href="/rss.xml"
+    />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={siteName} />
+    <meta name="twitter:card" content="summary" />
+
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const mode = stored === 'light' || stored === 'dark' ? stored : 'system';
+          const dark = mode === 'dark' || (mode === 'system' && prefersDark);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (_) {
+          /* ignore */
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-bg-light focus:px-3 focus:py-2 focus:text-ink-light dark:focus:bg-bg-dark dark:focus:text-ink-dark"
+    >
+      Skip to content
+    </a>
+
+    <header
+      id="site-header"
+      class="sticky top-0 z-40 border-b border-transparent bg-bg-light/85 backdrop-blur transition-colors duration-150 dark:bg-bg-dark/85"
+    >
+      <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
+        <a href="/" class="font-serif text-lg font-semibold tracking-tight no-underline">
+          lateston<span class="text-accent-light dark:text-accent-dark">.ai</span>
+        </a>
+        <nav class="flex items-center gap-4 font-sans text-sm">
+          <a href="/reviews/" class="no-underline hover:underline">Reviews</a>
+          <a href="/about" class="no-underline hover:underline">About</a>
+          <a href="/rss.xml" class="no-underline hover:underline">RSS</a>
+          <ThemeToggle />
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="mx-auto max-w-3xl px-4 py-10">
+      <slot />
+    </main>
+
+    <footer
+      class="mx-auto mt-16 max-w-3xl border-t border-ink-light/10 px-4 py-8 font-sans text-sm text-ink-light/60 dark:border-ink-dark/10 dark:text-ink-dark/60"
+    >
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <a href="#" class="no-underline hover:underline">GitHub</a>
+        <a href="/rss.xml" class="no-underline hover:underline">RSS</a>
+        <a href="/about" class="no-underline hover:underline">About</a>
+        <span class="ml-auto">© {year} lateston.ai</span>
+      </div>
+    </footer>
+
+    <script is:inline>
+      (() => {
+        const header = document.getElementById('site-header');
+        if (!header) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 4;
+          header.classList.toggle('border-ink-light/10', scrolled);
+          header.classList.toggle('dark:border-ink-dark/10', scrolled);
+        };
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script>
+  </body>
+</html>

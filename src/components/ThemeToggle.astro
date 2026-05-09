@@ -1,0 +1,91 @@
+---
+// ThemeToggle cycles between light, dark, and system. The actual theme class
+// is applied to <html> by the inline script in BaseLayout, before paint, to
+// avoid FOUC. This component only updates state and re-applies the class.
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-light/15 text-ink-light/70 transition-colors duration-150 hover:border-ink-light/40 hover:text-ink-light dark:border-ink-dark/20 dark:text-ink-dark/70 dark:hover:border-ink-dark/40 dark:hover:text-ink-dark"
+  aria-label="Toggle theme"
+  title="Toggle theme"
+>
+  <svg
+    data-icon="light"
+    class="h-4 w-4 hidden"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+    ></path>
+  </svg>
+  <svg
+    data-icon="dark"
+    class="h-4 w-4 hidden"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+  <svg
+    data-icon="system"
+    class="h-4 w-4 hidden"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+    <path d="M8 20h8M12 16v4"></path>
+  </svg>
+</button>
+
+<script is:inline>
+  (() => {
+    const button = document.getElementById('theme-toggle');
+    if (!button) return;
+
+    const order = ['system', 'light', 'dark'];
+
+    const apply = (mode) => {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const effective = mode === 'system' ? (prefersDark ? 'dark' : 'light') : mode;
+      document.documentElement.classList.toggle('dark', effective === 'dark');
+      button.querySelectorAll('[data-icon]').forEach((el) => el.classList.add('hidden'));
+      const icon = button.querySelector(`[data-icon="${mode}"]`);
+      if (icon) icon.classList.remove('hidden');
+      button.setAttribute('aria-label', `Theme: ${mode}. Click to change.`);
+    };
+
+    let current = localStorage.getItem('theme') || 'system';
+    if (!order.includes(current)) current = 'system';
+    apply(current);
+
+    button.addEventListener('click', () => {
+      const next = order[(order.indexOf(current) + 1) % order.length];
+      current = next;
+      localStorage.setItem('theme', next);
+      apply(next);
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (current === 'system') apply('system');
+    });
+  })();
+</script>

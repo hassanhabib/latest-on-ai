@@ -1,0 +1,41 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ReviewLayout from '../../layouts/ReviewLayout.astro';
+
+export async function getStaticPaths() {
+  const isProd = import.meta.env.PROD;
+  const reviews = (
+    await getCollection('reviews', ({ data }) => !isProd || !data.draft)
+  ).sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+  return reviews.map((entry, i) => {
+    const newer = reviews[i - 1];
+    const older = reviews[i + 1];
+    return {
+      params: { slug: entry.slug },
+      props: {
+        entry,
+        prev: older
+          ? { slug: older.slug, title: older.data.title }
+          : undefined,
+        next: newer
+          ? { slug: newer.slug, title: newer.data.title }
+          : undefined,
+      },
+    };
+  });
+}
+
+interface Props {
+  entry: CollectionEntry<'reviews'>;
+  prev?: { slug: string; title: string };
+  next?: { slug: string; title: string };
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<ReviewLayout entry={entry} prev={prev} next={next}>
+  <Content />
+</ReviewLayout>
